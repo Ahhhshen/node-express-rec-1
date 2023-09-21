@@ -28,7 +28,11 @@ export default class WebSessionConcept {
     // Hint: Take a look at how the "end" function makes sure the user is logged in. Keep in mind that a
     // synchronization like starting a session should just consist of a series of actions that may throw
     // exceptions and should not have its own control flow.
-    session.user = username;
+    if (session.user !== undefined) {
+      throw new Error("User already logged in!");
+    } else {
+      session.user = username;
+    }
   }
 
   getUser(session: WebSessionDoc) {
@@ -39,13 +43,15 @@ export default class WebSessionConcept {
   end(session: WebSessionDoc) {
     // We make sure the user is logged in before allowing the end action.
     this.isActive(session);
-    session.user = undefined;
+    session.user = undefined; 
   }
 
   // Helper functions
   isActive(session: WebSessionDoc) {
     if (session.user === undefined) {
       throw new UnauthenticatedError("Not logged in!");
+    } else {
+      return true;
     }
   }
 }
